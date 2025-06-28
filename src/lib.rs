@@ -23,7 +23,7 @@ pub fn hex_to_bytes(hex: &str) -> Result<Vec<u8>, hex::FromHexError> {
 pub fn swap_endian_u32(num: u32) -> [u8; 4] {
     // TODO: Implement little-endian byte swap for u32
     let bytes = num.to_le_bytes();
-    [bytes[3], bytes[2], bytes[1], bytes[0]]
+    [bytes[0], bytes[1], bytes[2], bytes[3]]
 }
 
 pub fn parse_satoshis(input: &str) -> Result<u64, String> {
@@ -52,7 +52,12 @@ pub fn classify_script(script: &[u8]) -> ScriptType {
 
 // TODO: complete Outpoint tuple struct
 #[derive(Debug, PartialEq)]
-pub struct Outpoint(String, u32);
+pub struct Outpoint(pub String, pub u32);
+impl Outpoint {
+    pub fn new(txid: String, vout: u32) -> Self {
+        Outpoint(txid, vout)
+    }
+}
 
 pub fn read_pushdata(script: &[u8]) -> &[u8] {
     // TODO: Return the pushdata portion of the script slice (assumes pushdata starts at index 2)
@@ -104,7 +109,7 @@ impl Opcode {
 }
 
 // TODO: Add necessary derive traits
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct UTXO {
     pub txid: Vec<u8>,
     pub vout: u32,
