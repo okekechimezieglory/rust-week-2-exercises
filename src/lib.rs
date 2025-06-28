@@ -28,7 +28,9 @@ pub fn swap_endian_u32(num: u32) -> [u8; 4] {
 
 pub fn parse_satoshis(input: &str) -> Result<u64, String> {
     // TODO: Parse input string to u64, return error string if invalid
-    input.parse::<u64>().map_err(|_| "Invalid satoshi amount".to_string())
+    input
+        .parse::<u64>()
+        .map_err(|_| "Invalid satoshi amount".to_string())
 }
 
 pub enum ScriptType {
@@ -86,7 +88,7 @@ pub fn apply_fee(balance: &mut u64, fee: u64) {
 
 pub fn move_txid(txid: String) -> String {
     // TODO: Return formatted string including the txid for display or logging
-    format!("txid: {}", txid)
+    format!("txid: {txid}")
 }
 
 // TODO: Add necessary derive traits
@@ -103,7 +105,7 @@ impl Opcode {
         match byte {
             0xac => Ok(Opcode::OpChecksig),
             0x76 => Ok(Opcode::OpDup),
-            _ => Err(format!("Invalid opcode: 0x{:02x}", byte)),
+            _ => Err(format!("Invalid opcode: 0x{byte:02x}")),
         }
     }
 }
